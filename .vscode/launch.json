@@ -5,10 +5,10 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Main",
+			"name": "Python: Color Quantize",
 			"type": "python",
 			"request": "launch",
-			"program": "main.py",
+			"program": "color_quantize.py",
 			"console": "integratedTerminal"
 		}
 	]
