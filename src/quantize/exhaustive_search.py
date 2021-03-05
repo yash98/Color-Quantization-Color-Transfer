@@ -11,11 +11,11 @@ def nearest_neighbor(query_point, representative_points):
 	return best_point
 
 def quantize(img, representative_points):
-	# quantized_img = np.zeros_like(img)
-	# for x in img.shape[0]:
-	# 	for y in img.shape[1]:
-	# 		quantized_img[x, y] = nearest_neighbor(img[x, y], representative_points)
-	# return quantized_img
+	quantized_img = np.zeros_like(img)
+	for x in range(img.shape[0]):
+		for y in range(img.shape[1]):
+			quantized_img[x, y] = nearest_neighbor(img[x, y], representative_points)
+	return quantized_img
 
-	vf = np.vectorize(lambda x: nearest_neighbor(x, nearest_neighbor))
-	return vf(img)
+	# vf = np.vectorize(lambda x: nearest_neighbor(x, representative_points))
+	# return vf(img)

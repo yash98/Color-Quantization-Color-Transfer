@@ -10,4 +10,7 @@ class nearest_neighbor():
 					self.cells[(i, j, k)] = points
 	
 	def query(self, query_point) -> tuple(int, int, int):
-		
+		pass
+
+	def quantize(self, img):
+		pass
