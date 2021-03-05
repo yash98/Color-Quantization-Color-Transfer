@@ -10,7 +10,7 @@
 			"request": "launch",
 			"program": "color_quantize.py",
 			"console": "integratedTerminal",
-			"args": ["-rf", "popularity", "-s", "kdtree", "images/pamela.png"]
+			"args": ["-rf", "median_cut", "-s", "kdtree", "-k", "420", "images/pamela.png"]
 		}
 	]
 }
