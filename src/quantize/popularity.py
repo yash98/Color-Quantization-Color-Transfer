@@ -1,20 +1,18 @@
-import cv2 as cv
-import matplotlib.pyplot as plt
+def algorithm(img, k):
+	color_counts = {}
+	for x in range(img.shape[0]):
+		for y in range(img.shape[1]):
+			color = img[x, y]
+			color = (color[0], color[1], color[2])
+			if color in color_counts:
+				color_counts[color] += 1
+			else:
+				color_counts[color] = 1
 
-def plot_histogram(img):
-    freq_b, freq_g, freq_r = [], [], []
-    for i, col in enumerate(['b', 'g', 'r']):
-        hist = cv.calcHist([img], [i], None, [256], [0, 256])
-        if col == 'b':
-            freq_b = hist
-        elif col == 'g':
-            freq_g = hist
-        else:
-            freq_r = hist
-    freq = [(int(freq_r[i][0]),int(freq_g[i][0]),int(freq_b[i][0])) for i in range(len(freq_r))]
-    
-    for f in freq:
-        print(f)
-    
-    print(len(set(freq)))
-    print(len(freq))
+	color_popularity_list = sorted(color_counts.items(), key=lambda item: -1*item[1])
+	color_popularity_list = [color for color, _ in color_popularity_list]
+
+	if k > len(color_popularity_list):
+		return color_popularity_list
+
+	return color_popularity_list[:k]
