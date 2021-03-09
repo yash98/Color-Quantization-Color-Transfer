@@ -7,4 +7,4 @@ def equalize(target_img, template_img):
 	std_target = np.std(target_img)
 	std_template = np.std(template_img)
 
-	return (target_img - mean_target) * (std_template/std_target) + mean_template
+	return np.clip((target_img - mean_target) * (std_template/std_target) + mean_template, 0, 255)

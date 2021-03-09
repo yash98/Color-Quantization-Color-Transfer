@@ -7,6 +7,8 @@ from src.transfer import color_map
 import argparse
 import cv2 as cv
 import numpy as np
+# import sys
+# np.set_printoptions(threshold=sys.maxsize)
 
 sample_size = 200
 neighbor_std_side = 2
@@ -21,17 +23,34 @@ if __name__ == "__main__":
 
 	gray_image = cv.imread(args.gray_image)
 	color_image = cv.imread(args.color_image)
-	gray_image_lab = cv.cvtColor(gray_image, cv.COLOR_RGB2LAB)
-	color_image_lab = cv.cvtColor(color_image, cv.COLOR_RGB2LAB)
+
+	if gray_image is None:
+		print("Path for grey image is incorrect")
+		exit()
+
+	if color_image is None:
+		print("Path for color image is incorrect")
+		exit()
+
+	gray_image_lab = cv.cvtColor(gray_image, cv.COLOR_BGR2LAB)
+	color_image_lab = cv.cvtColor(color_image, cv.COLOR_BGR2LAB)
+
+	# util.histogram(gray_image_lab)
+	# util.histogram(color_image)
 	
 	gray_neighbor_std = statistics.neighbor_std(gray_image_lab, neighbor_std_side)
 	color_neighbor_std = statistics.neighbor_std(color_image_lab, neighbor_std_side)
 
-	equalized_img = histogram_equalization.equalize(gray_image_lab, color_image_lab)
+	equalized_img = histogram_equalization.equalize(gray_image_lab, color_image_lab).astype(np.uint8)
 	sample_points, sample_std = jittered_sampling.sample(color_image_lab, color_neighbor_std, sample_size)
 
-	colored_img_lab = color_map.transfer(sample_points, sample_std, gray_image_lab, gray_neighbor_std)
-	colored_img = cv.cvtColor(colored_img_lab, cv.COLOR_LAB2RGB)
+	# util.histogram(equalized_img)
 
-	showcase_img = np.concatenate((gray_image, color_image, colored_img), axis=1)
+	colored_img_lab = color_map.transfer(sample_points, sample_std, gray_image_lab, gray_neighbor_std)
+	util.histogram(color_image_lab)
+	colored_img = cv.cvtColor(colored_img_lab, cv.COLOR_LAB2BGR)
+	util.histogram(color_image)
+
+	util.showimage("color", color_image)
+	showcase_img = np.concatenate((gray_image, colored_img), axis=1)
 	util.showimage("side-by-side", showcase_img)
