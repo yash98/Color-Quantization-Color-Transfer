@@ -11,6 +11,15 @@
 			"program": "color_quantize.py",
 			"console": "integratedTerminal",
 			"args": ["-rf", "median_cut", "-s", "kdtree", "-k", "420", "images/pamela.png"]
+		},
+		{
+			"name": "Python: Color Transfer",
+			"type": "python",
+			"request": "launch",
+			"program": "color_transfer.py",
+			"console": "integratedTerminal",
+			"args": []
 		}
+
 	]
 }
