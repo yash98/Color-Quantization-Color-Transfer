@@ -1,5 +1,6 @@
 import cv2 as cv
 from matplotlib import pyplot as plt
+import numpy as np
 
 def showimage(imglabel, img):
 	cv.imshow(imglabel, img)
@@ -24,3 +25,18 @@ def histogram(img):
 		plt.plot(histr, color = col)
 		plt.xlim([0, 256])
 	plt.show()
+
+coord_array_dict = {}
+
+def coord_array(x, y, w):
+	global coord_array_dict
+	if (x, y, w) in coord_array_dict:
+		return coord_array_dict[(x, y, w)]
+	
+	coord_arr = np.zeros((x-w, y-w, 2))
+	for i in range(x-w):
+		for j in range(y-w):
+			coord_arr[i, j] = np.array([w+i, w+j]) 
+
+	coord_array_dict[(x, y, w)] = coord_arr
+	return coord_arr
