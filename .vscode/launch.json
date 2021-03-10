@@ -18,7 +18,7 @@
 			"request": "launch",
 			"program": "color_transfer.py",
 			"console": "integratedTerminal",
-			"args": ["images/transfer/gray/tree.jpg", "images/transfer/color/tree.jpg"]
+			"args": ["-s", "images/transfer/gray/girl.jpg", "images/transfer/color/girl.jpg"]
 		}
 
 	]

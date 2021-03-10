@@ -28,15 +28,15 @@ def histogram(img):
 
 coord_array_dict = {}
 
-def coord_array(x, y, w):
+def coord_array(x, y):
 	global coord_array_dict
-	if (x, y, w) in coord_array_dict:
-		return coord_array_dict[(x, y, w)]
+	if (x, y) in coord_array_dict:
+		return coord_array_dict[(x, y)]
 	
-	coord_arr = np.zeros((x-w, y-w, 2))
-	for i in range(x-w):
-		for j in range(y-w):
-			coord_arr[i, j] = np.array([w+i, w+j]) 
+	coord_arr = np.zeros((x, y, 2)).astype(np.uint32)
+	for i in range(x):
+		for j in range(y):
+			coord_arr[i, j] = np.array([i, j]).astype(np.uint32)
 
-	coord_array_dict[(x, y, w)] = coord_arr
+	coord_array_dict[(x, y)] = coord_arr
 	return coord_arr

@@ -1,7 +1,5 @@
 import numpy as np
 
-from transfer.statistics import neighbor_std
-
 def best_match_global(sample_points, sample_std, point, std):
 	w1, w2 = 0.5, 0.5
 	best_dist = np.inf
@@ -37,12 +35,12 @@ def transfer_swatch(target_image, sample_points_dict, swatch_list, neighbor_side
 					for x in range(-1*neighbor_side, neighbor_side):
 						for y in range(-1*neighbor_side, neighbor_side):
 							try:
-								summation += (swatch[sample_point_x + x, sample_point_y + y] - target_image[i+x, j+y])**2
+								summation += (swatch[sample_point_x + x, sample_point_y + y, 0] - target_image[i+x, j+y, 0])**2
 							except IndexError:
 								pass
 					if summation <= best_dist:
 						best_dist = summation
-						best_point = sample_point[sample_point_x, sample_point_y]
+						best_point = swatch[sample_point_x, sample_point_y]
 
 			colored_img[i, j, 0] = target_image[i, j, 0]
 			colored_img[i, j, 1:] = best_point[1:]
