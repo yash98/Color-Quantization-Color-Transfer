@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Color Quantize",
+			"name": "Color Quantize",
 			"type": "python",
 			"request": "launch",
 			"program": "color_quantize.py",
@@ -13,13 +13,20 @@
 			"args": ["-rf", "median_cut", "-s", "kdtree", "-k", "420", "images/pamela.png"]
 		},
 		{
-			"name": "Python: Color Transfer",
+			"name": "Color Transfer MJ",
+			"type": "python",
+			"request": "launch",
+			"program": "color_transfer.py",
+			"console": "integratedTerminal",
+			"args": ["-s", "images/transfer/gray/mj_dark_bw.png", "images/transfer/color/mj_light.png"]
+		},
+		{
+			"name": "Color Transfer Girl",
 			"type": "python",
 			"request": "launch",
 			"program": "color_transfer.py",
 			"console": "integratedTerminal",
 			"args": ["-s", "images/transfer/gray/girl.jpg", "images/transfer/color/girl.jpg"]
 		}
-
 	]
 }

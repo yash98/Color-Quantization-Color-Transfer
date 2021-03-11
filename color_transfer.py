@@ -34,37 +34,64 @@ def global_transfer(gray_image_lab, color_image_lab, neighbor_std_side, sample_s
 	# util.histogram(color_image)
 
 	if showcase:
-		colored_img = cv.cvtColor(colored_img_lab, cv.COLOR_LAB2BGR)
-		util.showimage("color", color_image)
-		showcase_img = np.concatenate((gray_image, colored_img), axis=1)
-		util.showimage("side-by-side", showcase_img)
+		gray_image_rgb = cv.cvtColor(gray_image_lab, cv.COLOR_LAB2RGB)
+		color_image_rgb = cv.cvtColor(color_image_lab, cv.COLOR_LAB2RGB)
+		colored_image_rgb = cv.cvtColor(colored_img_lab.astype(np.uint8), cv.COLOR_LAB2RGB)
+		plt.axis('off')
+		plt.subplot(1, 3, 1)
+		plt.imshow(color_image_rgb)
+		plt.subplot(1, 3, 2)
+		plt.imshow(gray_image_rgb)
+		plt.subplot(1, 3, 3)
+		plt.imshow(colored_image_rgb)
+		plt.show()
+
 	return colored_img_lab
 
 def swatch_transfer(gray_image, color_image, rectangles, showcase):
 	gray_image_lab = cv.cvtColor(gray_image, cv.COLOR_BGR2LAB)
 	color_image_lab = cv.cvtColor(color_image, cv.COLOR_BGR2LAB)
+	equalized_image = histogram_equalization.equalize(gray_image_lab, color_image_lab)
 
+	plt.axis('off')
 	colored_swatch_list = []
+	rect_index = 0
 	for rect1, rect2 in rectangles:
 		(x1, y1), (x2, y2) = rect1
 		(a1, b1), (a2, b2) = rect2
 		# inclusive end points
-		gray_swatch = gray_image_lab[x1:x2+1,y1:y2+1]
+		gray_swatch = equalized_image[x1:x2+1,y1:y2+1]
 		color_swatch = color_image_lab[a1:a2+1,b1:b2+1]
 		colored_swatch = global_transfer(gray_swatch, color_swatch, neighbor_std_side_swatch, sample_size_swatch, False)
 		colored_swatch_list.append(colored_swatch)
+		plt.subplot(len(rectangles), 3, 3 * rect_index + 1)
+		plt.imshow(cv.cvtColor(color_swatch, cv.COLOR_LAB2RGB))
+		plt.subplot(len(rectangles), 3, 3 * rect_index + 2)
+		plt.imshow(cv.cvtColor(gray_swatch.astype(np.uint8), cv.COLOR_LAB2RGB))
+		plt.subplot(len(rectangles), 3, 3 * rect_index + 3)
+		plt.imshow(cv.cvtColor(colored_swatch.astype(np.uint8), cv.COLOR_LAB2RGB))
+		rect_index += 1
+	
+	plt.show()
 
 	sampled_points_dict = {}
 	for colored_swatch_id in range(len(colored_swatch_list)):
 		sampled_points_dict[colored_swatch_id] = jittered_sampling.coord_sample(colored_swatch_list[colored_swatch_id], sample_size_swatch, neighbor_std_side_swatch)
 	
-	colored_img_lab = color_map.transfer_swatch(gray_image_lab, sampled_points_dict, colored_swatch_list, neighbor_std_side_swatch)
+	colored_img_lab = color_map.transfer_swatch(equalized_image, sampled_points_dict, colored_swatch_list, neighbor_std_side_swatch)
 
 	if showcase:
-		colored_img = cv.cvtColor(colored_img_lab, cv.COLOR_LAB2BGR)
-		util.showimage("color", color_image)
-		showcase_img = np.concatenate((gray_image, colored_img), axis=1)
-		util.showimage("side-by-side", showcase_img)
+		gray_image_rgb = cv.cvtColor(gray_image, cv.COLOR_BGR2RGB)
+		color_image_rgb = cv.cvtColor(color_image, cv.COLOR_BGR2RGB)
+		colored_image_rgb = cv.cvtColor(colored_img_lab.astype(np.uint8), cv.COLOR_LAB2RGB)
+		plt.axis('off')
+		plt.subplot(1, 3, 1)
+		plt.imshow(color_image_rgb)
+		plt.subplot(1, 3, 2)
+		plt.imshow(gray_image_rgb)
+		plt.subplot(1, 3, 3)
+		plt.imshow(colored_image_rgb)
+		plt.show()
 
 	return colored_img_lab
 
@@ -115,11 +142,12 @@ if __name__ == "__main__":
 				exit()
 			rect1 = [int(x) for x in rect1]
 			rect2 = [int(x) for x in rect2]
-			rect1 = ((rect1[0], rect1[1]), (rect1[2], rect1[3]))
-			rect2 = ((rect2[0], rect2[1]), (rect2[2], rect2[3]))
+			rect1 = ((rect1[1], rect1[0]), (rect1[3], rect1[2]))
+			rect2 = ((rect2[1], rect2[0]), (rect2[3], rect2[2]))
 			rectangles.append((rect1, rect2))
 		
 		plot_proc.terminate()
+		plot_show(*util.mark_swatches(gray_image, color_image, rectangles))
 		swatch_transfer(gray_image, color_image, rectangles, True)
 	else:
 		gray_image_lab = cv.cvtColor(gray_image, cv.COLOR_BGR2LAB)
