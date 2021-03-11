@@ -112,7 +112,7 @@ if __name__ == "__main__":
 	parser.add_argument("-s", "--swatches", action="store_true", help="To enable user interactive swatch selection")
 	parser.add_argument("gray_image", type=str, help="Path of grayscale image to colorize")
 	parser.add_argument("color_image", type=str, help="Path of color image based on which colorization is done")
-	parser.add_argument("-o", "--output", type=str, help="Output file to save the colored image as")
+	# parser.add_argument("-o", "--output", type=str, help="Output file to save the colored image as")
 	args = parser.parse_args()
 
 	gray_image = cv.imread(args.gray_image)
